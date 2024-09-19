@@ -25,3 +25,13 @@ Start the app:
 ```
 pnpm run dev
 ```
+
+Go to http://localhost:3000/ to see the app.
+
+# Committing changes
+
+Run this command to cleanup the codebase or your commit will be rejected:
+
+```
+pnpm run format
+```
