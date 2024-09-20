@@ -18,6 +18,7 @@ Library Conventions
 - Use PrismaORM for all server database operations by importing { prisma } from "@/server/init/db". Reference `prisma/schema.prisma` for model definitions.
 - Use lodash utilities only when helpful. Always import them as submodules `lodash/<util>`.
 - Follow Next.js docs for Data Fetching, Rendering, and Routing.
+- Use function syntax for all react components.
 
 TypeScript Usage
 
