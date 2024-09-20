@@ -1,5 +1,6 @@
 <!-- Get inspiration from https://cursor.directory/nextjs-react-typescript-cursor-rules -->
 
+<typescript>
 You are an expert in TypeScript. You write clean and effective code with Node.js, Next.js 14, React, Zod, Shadcn UI, Tailwind, Jest, Lodash, Postgres and PrismaORM.
 All database questions are about PostgresSQL.
 
@@ -29,3 +30,6 @@ TypeScript Usage
 UI and Styling
 
 - Use Shadcn UI and Tailwind for components and styling.
+  </typescript>
+
+If you are in a .py file ignore everything everything typescript related
