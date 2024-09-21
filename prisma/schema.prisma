@@ -2,16 +2,15 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-  // Further reading:
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  // https://github.com/pgvector/pgvector-node?tab=readme-ov-file#prisma
+  extensions = [vector]
 }
 
 model Session {
@@ -254,4 +253,13 @@ model ChatMessageThread {
   documentId String
 
   @@index([documentId])
+}
+
+model VectorizedItem {
+  /// prisma-lint-ignore-model require-field
+  /// prisma-lint-ignore-model require-field-type
+  id Int @id @default(autoincrement())
+
+  content   String
+  embedding Unsupported("vector(3072)")?
 }

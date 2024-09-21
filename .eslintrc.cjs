@@ -131,6 +131,12 @@ const config = {
         ],
       },
     },
+    {
+      files: [`src/scripts/**/*.ts`, `src/scripts/**/*.js`],
+      rules: {
+        "no-console": `off`,
+      },
+    },
   ],
   rules: {
     "rulesdir/proper-api-route-handling": [

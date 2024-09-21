@@ -2,7 +2,7 @@ version: "3.9"
 name: clayboard-dev-services
 services:
   db:
-    image: postgres:15
+    image: pgvector/pgvector:pg15
     restart: always
     container_name: clayboard-dev-db
     environment:
@@ -13,7 +13,7 @@ services:
     volumes:
       - ./db-init:/docker-entrypoint-initdb.d/
   shadow_db:
-    image: postgres:15
+    image: pgvector/pgvector:pg15
     restart: always
     container_name: clayboard-dev-shadow-db
     ports:
