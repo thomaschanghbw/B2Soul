@@ -7,11 +7,11 @@ const embedding2 = await vectorModel.getEmbedding({
 
 console.log(`Embedding`, { embedding1 });
 
-await vectorModel.saveIndex(`Hello world`, embedding1);
-await vectorModel.saveIndex(
-  `They're eating the dogs they're eating the cats`,
-  embedding2
-);
+await vectorModel.saveIndex({ content: `Hello world`, embedding: embedding1 });
+await vectorModel.saveIndex({
+  content: `They're eating the dogs they're eating the cats`,
+  embedding: embedding2,
+});
 
 const embedding3 = await vectorModel.getEmbedding({
   content: `Chicken is the best food`,

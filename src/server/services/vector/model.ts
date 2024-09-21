@@ -28,10 +28,13 @@ class VectorModel {
     return embedding.data[0]!.embedding;
   }
 
-  async saveIndex(
-    content: string,
-    embedding: number[]
-  ): Promise<VectorizedItem> {
+  async saveIndex({
+    content,
+    embedding,
+  }: {
+    content: string;
+    embedding: number[];
+  }): Promise<VectorizedItem> {
     const embeddingSql = pgvector.toSql(embedding) as unknown as string;
 
     const item: VectorizedItem = await prisma.$queryRaw`
