@@ -56,7 +56,7 @@ class VectorModel {
 
     await prisma.$queryRaw`
       UPDATE "VectorizedItem"
-      SET embedding = ${embeddingSql}::vector
+      SET embedding_512 = ${embeddingSql}::vector
       WHERE id = ${id}
     `;
   }
@@ -71,12 +71,32 @@ class VectorModel {
     const embeddingSql = pgvector.toSql(embedding) as unknown as string;
 
     const items: VectorizedItem[] = await prisma.$queryRaw`
-      SELECT id, content, embedding::text
+      SELECT id, content, embedding_512::text,
+      collection, book, verse, translation
       FROM "VectorizedItem"
-      ORDER BY embedding <-> ${embeddingSql}::vector
+      ORDER BY embedding_512 <-> ${embeddingSql}::vector
       LIMIT ${limit}
     `;
     return items;
+  }
+
+  async search({
+    content,
+    limit = 5,
+  }: {
+    content: string;
+    limit?: number;
+  }): Promise<VectorizedItem[]> {
+    const embedding = await this.getEmbedding({
+      content,
+    });
+
+    const nearest = await this.nearestNeighbor({
+      embedding,
+      limit,
+    });
+
+    return nearest;
   }
 }
 
