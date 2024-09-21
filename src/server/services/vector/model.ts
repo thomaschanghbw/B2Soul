@@ -1,8 +1,8 @@
 import type { Prisma, VectorizedItem } from "@prisma/client";
 import pgvector from "pgvector";
+import { VoyageAIClient } from "voyageai";
 
 import { prisma } from "@/server/init/db";
-import { openai } from "@/server/init/openai";
 export const userModelDefaultInclude = {
   Companies: {
     include: {
@@ -11,21 +11,26 @@ export const userModelDefaultInclude = {
   },
 };
 
+const client = new VoyageAIClient({ apiKey: process.env.VOYAGE_API_KEY });
+
 export type UserWithDefaults = Prisma.UserGetPayload<{
   include: typeof userModelDefaultInclude;
 }>;
 
 class VectorModel {
   async getEmbedding({ content }: { content: string }): Promise<number[]> {
-    const embedding = await openai.embeddings.create({
-      model: `text-embedding-3-large`,
-      input: content,
-      encoding_format: `float`,
+    const response = await client.embed({
+      input: [content],
+      model: `voyage-3-lite`,
     });
 
-    // embeddings.create can also take an array input and return an array of embeddings
-    // For now we are just enforcing a single embedding
-    return embedding.data[0]!.embedding;
+    const embedding = response.data?.[0]?.embedding;
+
+    if (!embedding) {
+      throw new Error(`No embedding for ${content}`);
+    }
+
+    return embedding;
   }
 
   async saveIndex({
@@ -44,6 +49,16 @@ class VectorModel {
     `;
 
     return item;
+  }
+
+  async updateEmbedding(id: number, embedding: number[]): Promise<void> {
+    const embeddingSql = pgvector.toSql(embedding) as unknown as string;
+
+    await prisma.$queryRaw`
+      UPDATE "VectorizedItem"
+      SET embedding = ${embeddingSql}::vector
+      WHERE id = ${id}
+    `;
   }
 
   async nearestNeighbor({
