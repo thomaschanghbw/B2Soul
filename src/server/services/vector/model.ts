@@ -33,6 +33,23 @@ class VectorModel {
     return embedding;
   }
 
+  async getEmbeddings(contents: string[]): Promise<number[][]> {
+    const response = await client.embed({
+      input: contents,
+      model: `voyage-3-lite`,
+    });
+
+    const embeddings = response.data?.map((item) => item.embedding);
+
+    if (!embeddings || embeddings.length !== contents.length) {
+      throw new Error(`Failed to get embeddings for all input contents`);
+    }
+
+    return embeddings.filter(
+      (embedding): embedding is number[] => embedding !== undefined
+    );
+  }
+
   async saveIndex({
     content,
     embedding,
