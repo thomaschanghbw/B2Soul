@@ -97,3 +97,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# notebooks
+notebooks/bible.json
+notebooks/quran.json

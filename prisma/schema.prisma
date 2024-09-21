@@ -258,8 +258,15 @@ model ChatMessageThread {
 model VectorizedItem {
   /// prisma-lint-ignore-model require-field
   /// prisma-lint-ignore-model require-field-type
-  id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  content   String
+  collection  String? // Quran, Torah, Pali Canon, Bible, etc
+  book        String? // surah, chapter, etc
+  verse       String? // ayah, verse, etc
+  translation String? // King James Version, etc
+
+  content   String                       @db.Text
   embedding Unsupported("vector(3072)")?
 }
