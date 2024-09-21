@@ -281,6 +281,9 @@ dependencies:
   type-fest:
     specifier: ^4.22.0
     version: 4.22.0
+  voyageai:
+    specifier: 0.0.1-5
+    version: 0.0.1-5
   zod:
     specifier: ^3.23.8
     version: 3.23.8
@@ -21998,6 +22001,23 @@ packages:
       "@types/unist": 3.0.2
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
+    dev: false
+
+  /voyageai@0.0.1-5:
+    resolution:
+      {
+        integrity: sha512-IuXSXM3l9J3NIq+MLHXacG/yhswpEgWIu9eBqoFqMRnFiDx00dLL62OWg6WqVSipddZLwFeWH1Kaj56x5eqhOQ==,
+      }
+    dependencies:
+      form-data: 4.0.0
+      formdata-node: 6.0.3
+      js-base64: 3.7.2
+      node-fetch: 2.7.0(encoding@0.1.13)
+      qs: 6.11.2
+      readable-stream: 4.5.2
+      url-join: 4.0.1
+    transitivePeerDependencies:
+      - encoding
     dev: false
 
   /vue@3.4.35(typescript@5.4.5):

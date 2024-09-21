@@ -267,6 +267,6 @@ model VectorizedItem {
   verse       String? // ayah, verse, etc
   translation String? // King James Version, etc
 
-  content   String                       @db.Text
-  embedding Unsupported("vector(3072)")?
+  content   String                      @db.Text
+  embedding Unsupported("vector(512)")?
 }
