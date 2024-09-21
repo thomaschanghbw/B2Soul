@@ -78,6 +78,23 @@ class VectorModel {
     `;
   }
 
+  async updateEmbeddings(ids: number[], embeddings: number[][]): Promise<void> {
+    if (ids.length !== embeddings.length) {
+      throw new Error(`The number of IDs must match the number of embeddings`);
+    }
+
+    const updatePromises = ids.map((id, index) => {
+      const embedding = embeddings[index];
+      if (!embedding) {
+        throw new Error(`No embedding for ${id}`);
+      }
+
+      return this.updateEmbedding(id, embedding);
+    });
+
+    await Promise.all(updatePromises);
+  }
+
   async nearestNeighbor({
     embedding,
     limit = 5,

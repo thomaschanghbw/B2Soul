@@ -1,5 +1,6 @@
 import type { VectorizedItem } from "@prisma/client";
 import fs from "fs";
+import path from "path";
 
 import { prisma } from "@/server/init/db";
 import { vectorModel } from "@/server/services/vector/model";
@@ -85,8 +86,9 @@ async function extractAndEmbed(
     const vectorizedItems = await prisma.vectorizedItem.createMany({
       data,
     });
-    console.log(`Created ${vectorizedItems.count} items`);
-    console.log(`First item: ${data[0]?.content}`);
+    console.log(
+      `Created ${vectorizedItems.count} items, ${data[0]?.book} ${data[0]?.verse}`
+    );
   }
 
   //Update embeddings.
@@ -107,20 +109,16 @@ async function extractAndEmbed(
       const embeddings = await vectorModel.getEmbeddings(contents);
       console.log(`Got embeddings for ${contents.length} items`);
 
-      for (let j = 0; j < itemsNeedingEmbedding.length; j++) {
-        const [_key, item] = itemsNeedingEmbedding[j] ?? [];
-        if (!item) {
-          console.error(`No item for embedding ${j}`);
-          continue;
-        }
-        const embedding = embeddings[j];
-        if (!embedding) {
-          console.error(`No embedding for item ${item.id}`);
-          continue;
-        }
-        await vectorModel.updateEmbedding(item.id, embedding);
-        console.log(`Added embedding for item ${item.id}`);
-      }
+      await vectorModel.updateEmbeddings(
+        itemsNeedingEmbedding.map(([_, item]) => item.id),
+        embeddings
+      );
+
+      console.log(
+        `Added embeddings for ${itemsNeedingEmbedding.length} verses, starting with: ${itemsNeedingEmbedding[0]?.[1]?.book ?? `null`} ${
+          itemsNeedingEmbedding[0]?.[1]?.verse ?? `null`
+        }`
+      );
     }
 
     console.log(
@@ -134,13 +132,42 @@ async function main() {
   const quranPath = `./notebooks/quran.json`;
 
   await extractAndEmbed(biblePath, `Bible`, `King James Version`);
+  console.log(`==================================================`);
   await extractAndEmbed(quranPath, `Quran`, `Muhammad Asad`);
+  console.log(`==================================================`);
+
+  const buddhistTextsPath = `./bilara-data/.scripts/bilara-io`;
+  const files = fs
+    .readdirSync(buddhistTextsPath)
+    .filter((file) => file.endsWith(`.json`));
+
+  for (const file of files) {
+    const filePath: string = path.join(buddhistTextsPath, file);
+    const content = fs.readFileSync(filePath, `utf8`);
+    const data = JSON.parse(content) as Record<string, Verse>;
+    const translation = data[0]?.translation;
+    console.log(`Processing ${file} with translation ${translation}`);
+
+    if (!translation) {
+      console.error(`No translation for ${file}`);
+      continue;
+    }
+    await extractAndEmbed(filePath, `Pali Canon`, translation);
+    console.log(`==================================================`);
+  }
 
   // const items = await vectorModel.getEmbeddings([
   //   `In the beginning God created the heaven and the earth.`,
   //   `And God said, Let there be light: and there was light.`,
   // ]);
   // console.log(items);
+
+  // const items = await vectorModel.search({
+  //   content: `Jehoiakim was twenty-five years old when he became king, and he reigned in Jerusalem eleven years. His mother’s name was Zebidah daughter of Pedaiah; she was from Rumah.`,
+  // });
+  // console.log(
+  //   items.map((i) => `${i.collection} ${i.book} ${i.verse}: ${i.content}`)
+  // );
 }
 
 main().catch((e) => {
