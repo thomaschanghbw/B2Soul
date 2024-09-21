@@ -2,7 +2,7 @@ import "katex/dist/katex.min.css";
 
 import type { FC } from "react";
 import { memo } from "react";
-import type { Options } from "react-markdown";
+import type { Components, Options } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
@@ -41,7 +41,13 @@ const preprocessContent = (content: string) => {
   return preprocessMedia(preprocessLaTeX(content));
 };
 
-export default function Markdown({ content }: { content: string }) {
+export default function Markdown({
+  content,
+  components,
+}: {
+  content: string;
+  components?: Partial<Components>;
+}) {
   const processedContent = preprocessContent(content);
 
   return (
@@ -91,6 +97,7 @@ export default function Markdown({ content }: { content: string }) {
             />
           );
         },
+        ...components,
       }}
     >
       {processedContent}

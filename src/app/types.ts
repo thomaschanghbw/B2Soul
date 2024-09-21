@@ -17,14 +17,17 @@ export enum Religion {
   CHRISTIANITY = `Christianity`,
   ISLAM = `Islam`,
   HINDUISM = `Hinduism`,
-  BUDDHISM = `Buddhism`,
-  JEWISH = `Jewish`,
-  OTHER = `Other`,
+  // BUDDHISM = `Buddhism`,
+  // JEWISH = `Jewish`,
 }
 
 const religionQAResponseSchema = z.object({
   religion: z.nativeEnum(Religion),
-  message: z.string(),
+  message: z
+    .string()
+    .describe(
+      `The response to the question, written in first person from the perspective of a spiritual leader of the religion. Use markdown bolding whenever appropriate to highlight key words and phrases`
+    ),
   sources: z.array(
     z.object({
       quote: z.string(),

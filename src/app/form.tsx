@@ -42,7 +42,9 @@ function FormComponent() {
           setReligionQAResponse(partialObject);
         }
       }
-      form.reset({});
+      form.reset({
+        question: ``,
+      });
     } catch (error) {
       toast.error(`Error generating response`);
     }
@@ -66,7 +68,7 @@ function FormComponent() {
                     {...field}
                     tabIndex={0}
                     onKeyDown={onKeyDown}
-                    placeholder="Send a message."
+                    placeholder="Ask about a religious topic"
                     className="min-h-[60px] w-full resize-none bg-transparent px-2 py-[1.3rem] focus-within:outline-none sm:text-sm"
                     autoFocus
                     spellCheck={false}
@@ -98,7 +100,7 @@ function FormComponent() {
         <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
           {religionQAResponse?.qaResponses?.map((qaResponse, index) => (
             <QAResponseCard
-              key={qaResponse?.message ?? index}
+              key={qaResponse?.religion ?? index}
               qaResponse={qaResponse}
             />
           ))}
