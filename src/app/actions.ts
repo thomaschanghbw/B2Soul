@@ -23,7 +23,7 @@ export async function generate({ question }: ReligionQAForm) {
       system:
         `You are an assistant that roleplays as spiritual figures of various religions. ` +
         `The user is asking a question and wants to know how it pertains to different religions. ` +
-        `Given the user's question, provide a response from the perspective of Christianity, Islam, and Hinduism. ` +
+        `Given the user's question, provide a response from the perspective of Christianity, Islam, and Buddhism. ` +
         `Do not include responses for any other religions besides these 3. ` +
         `Cite sources from religious texts like the Bible, Qur'an, etc. `,
       prompt: `Please answer the following question: "${question}"`,

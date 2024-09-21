@@ -11,7 +11,7 @@ import Textarea from "react-textarea-autosize";
 import { generate } from "@/app/actions";
 import QAResponseCard from "@/app/QAResponseCard";
 import type { PartialReligionQA, ReligionQAForm } from "@/app/types";
-import { religionQAFormSchema } from "@/app/types";
+import { Religion, religionQAFormSchema } from "@/app/types";
 import { Button } from "@/client/components/ui/button";
 import {
   Form,
@@ -98,12 +98,18 @@ function FormComponent() {
           />
         </div>
         <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
-          {religionQAResponse?.qaResponses?.map((qaResponse, index) => (
-            <QAResponseCard
-              key={qaResponse?.religion ?? index}
-              qaResponse={qaResponse}
-            />
-          ))}
+          <QAResponseCard
+            qaResponses={religionQAResponse?.qaResponses ?? undefined}
+            religion={Religion.CHRISTIANITY}
+          />
+          <QAResponseCard
+            qaResponses={religionQAResponse?.qaResponses ?? undefined}
+            religion={Religion.ISLAM}
+          />
+          <QAResponseCard
+            qaResponses={religionQAResponse?.qaResponses ?? undefined}
+            religion={Religion.BUDDHISM}
+          />
         </div>
 
         {/* <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-3">

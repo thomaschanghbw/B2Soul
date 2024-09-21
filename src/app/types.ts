@@ -16,8 +16,8 @@ export type ReligionQAForm = z.infer<typeof religionQAFormSchema>;
 export enum Religion {
   CHRISTIANITY = `Christianity`,
   ISLAM = `Islam`,
-  HINDUISM = `Hinduism`,
-  // BUDDHISM = `Buddhism`,
+  // HINDUISM = `Hinduism`,
+  BUDDHISM = `Buddhism`,
   // JEWISH = `Jewish`,
 }
 
